@@ -9,6 +9,7 @@ separates them. Run this once a day.
     python3 track.py                # fetch today's list, save it, print the report
     python3 track.py sightmap.json  # same, from the API JSON saved in a browser
 """
+import gzip
 import json
 import sys
 import urllib.request
@@ -27,7 +28,10 @@ def fetch(path=None):
     else:
         req = urllib.request.Request(API, headers={"User-Agent": "modera-unit-tracker"})
         with urllib.request.urlopen(req, timeout=30) as resp:
-            raw = json.load(resp)
+            body = resp.read()
+        if body[:2] == b"\x1f\x8b":  # SightMap gzips even when not asked to
+            body = gzip.decompress(body)
+        raw = json.loads(body)
     data = raw["data"]
     plans = {}
     for p in data["floor_plans"]:
