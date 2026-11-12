@@ -11,7 +11,7 @@
    "plan": "C01",
    "beds": 3,
    "sqft": 1228,
-   "price": 4181,
+   "price": 4271,
    "available_on": "2026-11-12"
   },
   "129": {
@@ -39,7 +39,7 @@
    "plan": "S04",
    "beds": 0,
    "sqft": 513,
-   "price": 1547,
+   "price": 1643,
    "available_on": "2026-11-12"
   },
   "218": {
@@ -53,28 +53,28 @@
    "plan": "B14",
    "beds": 2,
    "sqft": 1200,
-   "price": 3217,
+   "price": 3264,
    "available_on": "2026-11-21"
   },
   "225": {
    "plan": "S01",
    "beds": 0,
    "sqft": 557,
-   "price": 1488,
+   "price": 1588,
    "available_on": "2026-11-14"
   },
   "231": {
    "plan": "A01",
    "beds": 1,
    "sqft": 591,
-   "price": 1583,
+   "price": 1579,
    "available_on": "2026-11-12"
   },
   "239": {
    "plan": "S03",
    "beds": 0,
    "sqft": 513,
-   "price": 1558,
+   "price": 1658,
    "available_on": "2026-12-10"
   },
   "270": {
@@ -186,14 +186,14 @@
    "plan": "B15",
    "beds": 2,
    "sqft": 1229,
-   "price": 3443,
+   "price": 3396,
    "available_on": "2026-11-12"
   },
   "458": {
    "plan": "A06",
    "beds": 1,
    "sqft": 667,
-   "price": 1698,
+   "price": 1694,
    "available_on": "2026-11-12"
   },
   "462": {
@@ -242,7 +242,7 @@
    "plan": "S01",
    "beds": 0,
    "sqft": 483,
-   "price": 1693,
+   "price": 1593,
    "available_on": "2026-12-08"
   },
   "683": {
@@ -277,7 +277,7 @@
    "plan": "S07",
    "beds": 0,
    "sqft": 536,
-   "price": 1918,
+   "price": 1818,
    "available_on": "2026-12-26"
   },
   "884": {
