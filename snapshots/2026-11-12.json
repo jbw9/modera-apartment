@@ -1,0 +1,291 @@
+{
+ "units": {
+  "115": {
+   "plan": "ZA03 (MFTE) Income Restricted",
+   "beds": 1,
+   "sqft": 609,
+   "price": 1867,
+   "available_on": "2026-11-12"
+  },
+  "121": {
+   "plan": "C01",
+   "beds": 3,
+   "sqft": 1228,
+   "price": 4181,
+   "available_on": "2026-11-12"
+  },
+  "129": {
+   "plan": "ZA01 (MFTE) Income Restricted",
+   "beds": 1,
+   "sqft": 588,
+   "price": 1867,
+   "available_on": "2026-11-12"
+  },
+  "144": {
+   "plan": "A08",
+   "beds": 1,
+   "sqft": 670,
+   "price": 2243,
+   "available_on": "2026-12-12"
+  },
+  "158": {
+   "plan": "ZA06 (MFTE) Income Restricted",
+   "beds": 1,
+   "sqft": 659,
+   "price": 1867,
+   "available_on": "2026-11-12"
+  },
+  "207": {
+   "plan": "S04",
+   "beds": 0,
+   "sqft": 513,
+   "price": 1547,
+   "available_on": "2026-11-12"
+  },
+  "218": {
+   "plan": "ZA03 (MFTE) Income Restricted",
+   "beds": 1,
+   "sqft": 616,
+   "price": 1867,
+   "available_on": "2026-11-12"
+  },
+  "224": {
+   "plan": "B14",
+   "beds": 2,
+   "sqft": 1200,
+   "price": 3217,
+   "available_on": "2026-11-21"
+  },
+  "225": {
+   "plan": "S01",
+   "beds": 0,
+   "sqft": 557,
+   "price": 1488,
+   "available_on": "2026-11-14"
+  },
+  "231": {
+   "plan": "A01",
+   "beds": 1,
+   "sqft": 591,
+   "price": 1583,
+   "available_on": "2026-11-12"
+  },
+  "239": {
+   "plan": "S03",
+   "beds": 0,
+   "sqft": 513,
+   "price": 1558,
+   "available_on": "2026-12-10"
+  },
+  "270": {
+   "plan": "B06",
+   "beds": 2,
+   "sqft": 1003,
+   "price": 2857,
+   "available_on": "2026-12-08"
+  },
+  "304": {
+   "plan": "ZA04 (MFTE) Income Restricted",
+   "beds": 1,
+   "sqft": 618,
+   "price": 1867,
+   "available_on": "2026-11-12"
+  },
+  "307": {
+   "plan": "ZS04 (MFTE) Income Restricted",
+   "beds": 0,
+   "sqft": 513,
+   "price": 1488,
+   "available_on": "2026-11-12"
+  },
+  "321": {
+   "plan": "C01",
+   "beds": 3,
+   "sqft": 1229,
+   "price": 4321,
+   "available_on": "2026-11-12"
+  },
+  "322": {
+   "plan": "A03",
+   "beds": 1,
+   "sqft": 616,
+   "price": 1799,
+   "available_on": "2026-11-12"
+  },
+  "338": {
+   "plan": "A08",
+   "beds": 1,
+   "sqft": 672,
+   "price": 2258,
+   "available_on": "2026-12-12"
+  },
+  "354": {
+   "plan": "S02",
+   "beds": 0,
+   "sqft": 499,
+   "price": 1598,
+   "available_on": "2026-11-21"
+  },
+  "378": {
+   "plan": "ZA05 (MFTE) Income Restricted",
+   "beds": 1,
+   "sqft": 612,
+   "price": 1867,
+   "available_on": "2026-11-12"
+  },
+  "409": {
+   "plan": "S03",
+   "beds": 0,
+   "sqft": 511,
+   "price": 1618,
+   "available_on": "2026-11-28"
+  },
+  "411": {
+   "plan": "S03",
+   "beds": 0,
+   "sqft": 511,
+   "price": 1653,
+   "available_on": "2026-12-14"
+  },
+  "425": {
+   "plan": "ZA03 (MFTE) Income Restricted",
+   "beds": 1,
+   "sqft": 629,
+   "price": 1867,
+   "available_on": "2026-11-12"
+  },
+  "431": {
+   "plan": "ZA01 (MFTE) Income Restricted",
+   "beds": 1,
+   "sqft": 664,
+   "price": 1867,
+   "available_on": "2026-11-12"
+  },
+  "436": {
+   "plan": "B13",
+   "beds": 2,
+   "sqft": 1161,
+   "price": 3065,
+   "available_on": "2026-11-12"
+  },
+  "440": {
+   "plan": "A08",
+   "beds": 1,
+   "sqft": 764,
+   "price": 2343,
+   "available_on": "2026-12-08"
+  },
+  "449": {
+   "plan": "A17D",
+   "beds": 1,
+   "sqft": 830,
+   "price": 2814,
+   "available_on": "2026-11-12"
+  },
+  "453": {
+   "plan": "B15",
+   "beds": 2,
+   "sqft": 1229,
+   "price": 3443,
+   "available_on": "2026-11-12"
+  },
+  "458": {
+   "plan": "A06",
+   "beds": 1,
+   "sqft": 667,
+   "price": 1698,
+   "available_on": "2026-11-12"
+  },
+  "462": {
+   "plan": "A08",
+   "beds": 1,
+   "sqft": 718,
+   "price": 2288,
+   "available_on": "2026-12-08"
+  },
+  "487": {
+   "plan": "A02",
+   "beds": 1,
+   "sqft": 603,
+   "price": 1893,
+   "available_on": "2026-12-08"
+  },
+  "509": {
+   "plan": "ZS03 (MFTE) Income Restricted",
+   "beds": 0,
+   "sqft": 511,
+   "price": 1488,
+   "available_on": "2026-11-12"
+  },
+  "525": {
+   "plan": "ZA03 (MFTE) Income Restricted",
+   "beds": 1,
+   "sqft": 629,
+   "price": 1867,
+   "available_on": "2026-11-12"
+  },
+  "543": {
+   "plan": "S03",
+   "beds": 0,
+   "sqft": 511,
+   "price": 1663,
+   "available_on": "2026-12-09"
+  },
+  "555": {
+   "plan": "S02",
+   "beds": 0,
+   "sqft": 500,
+   "price": 1713,
+   "available_on": "2026-12-08"
+  },
+  "568": {
+   "plan": "S01",
+   "beds": 0,
+   "sqft": 483,
+   "price": 1693,
+   "available_on": "2026-12-08"
+  },
+  "683": {
+   "plan": "A14",
+   "beds": 1,
+   "sqft": 759,
+   "price": 2333,
+   "available_on": "2026-11-13"
+  },
+  "684": {
+   "plan": "A10",
+   "beds": 1,
+   "sqft": 694,
+   "price": 1859,
+   "available_on": "2026-12-01"
+  },
+  "784": {
+   "plan": "A10",
+   "beds": 1,
+   "sqft": 694,
+   "price": 1879,
+   "available_on": "2026-12-12"
+  },
+  "785": {
+   "plan": "A10",
+   "beds": 1,
+   "sqft": 698,
+   "price": 1879,
+   "available_on": "2026-11-14"
+  },
+  "880": {
+   "plan": "S07",
+   "beds": 0,
+   "sqft": 536,
+   "price": 1918,
+   "available_on": "2026-12-26"
+  },
+  "884": {
+   "plan": "A10",
+   "beds": 1,
+   "sqft": 697,
+   "price": 1899,
+   "available_on": "2026-11-19"
+  }
+ }
+}
