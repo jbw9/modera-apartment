@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1-Bedroom Watch</title>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #898781;
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --border: rgba(11,11,11,0.10);
+  --empty-cell: #f0efec;
+  --series-other: #2a78d6;
+  --series-a02: #eb6834;
+  --a02-wash: rgba(235,104,52,0.08);
+  --good-text: #006300;
+  --critical: #d03b3b;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --text-primary: #f0efec;
+    --text-secondary: #c3c2b7;
+    --text-muted: #898781;
+    --grid: #2c2c2a;
+    --axis: #383835;
+    --border: rgba(255,255,255,0.10);
+    --empty-cell: #262624;
+    --series-other: #3987e5;
+    --series-a02: #d95926;
+    --a02-wash: rgba(217,89,38,0.14);
+    --good-text: #0ca30c;
+    --critical: #e66767;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--text-primary);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+main { max-width: 980px; margin: 0 auto; padding: 32px 16px 64px; }
+h1 { font-size: 26px; line-height: 1.2; margin: 0 0 4px; font-weight: 650; letter-spacing: -0.01em; }
+h2 { font-size: 17px; margin: 0 0 4px; font-weight: 600; }
+.sub, .hint { color: var(--text-secondary); margin: 0; }
+.hint { font-size: 13px; margin-bottom: 14px; }
+section { margin-top: 36px; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+.num { font-variant-numeric: tabular-nums; }
+
+/* A02 spotlight */
+.spotlight { border-left: 4px solid var(--series-a02); }
+.spot-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.hero { font-size: 44px; font-weight: 650; line-height: 1; }
+.spot-label { color: var(--text-secondary); }
+.spot-units { margin: 16px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.spot-units li {
+  display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: baseline;
+  padding: 10px 12px; border-radius: 8px; background: var(--a02-wash);
+}
+.spot-units b { font-size: 17px; }
+.spot-empty { margin: 12px 0 0; color: var(--text-secondary); }
+
+/* Stat tiles */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 12px; }
+.tile .label { color: var(--text-secondary); font-size: 13px; }
+.tile .value { font-size: 30px; font-weight: 650; line-height: 1.2; }
+.tile .delta { font-size: 13px; color: var(--text-secondary); }
+
+/* Controls */
+.controls { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin-top: 20px; color: var(--text-secondary); font-size: 14px; }
+.controls label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+
+/* Presence grid */
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.swatch { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+.grid-wrap { overflow-x: auto; padding-bottom: 4px; }
+table.presence { border-collapse: separate; border-spacing: 2px; font-size: 12px; line-height: 16px; }
+.presence th { font-weight: 400; font-size: 11px; color: var(--text-muted); text-align: center; padding: 0; width: 16px; max-width: 16px; }
+.presence th.month { position: relative; height: 16px; }
+.presence th.month span { position: absolute; left: 0; top: 0; white-space: nowrap; }
+.presence td.unit {
+  position: sticky; left: 0; background: var(--surface); z-index: 1;
+  padding-right: 10px; white-space: nowrap; color: var(--text-secondary); text-align: left;
+}
+.presence td.unit b { color: var(--text-primary); font-weight: 600; }
+.presence td.c { width: 16px; height: 16px; padding: 0; border-radius: 4px; background: var(--empty-cell); }
+.presence td.c.on { background: var(--series-other); }
+.presence td.c.on.a02 { background: var(--series-a02); }
+
+/* Tables */
+.table-wrap { overflow-x: auto; }
+table.list { width: 100%; border-collapse: collapse; font-size: 14px; }
+.list th { text-align: left; font-weight: 500; color: var(--text-muted); font-size: 12px; padding: 0 10px 8px; border-bottom: 1px solid var(--axis); white-space: nowrap; }
+.list td { padding: 9px 10px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+.list td.r, .list th.r { text-align: right; }
+.list tr.a02 td { background: var(--a02-wash); }
+.list tr.a02 td:first-child { box-shadow: inset 3px 0 0 var(--series-a02); }
+.tag { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 99px; border: 1px solid var(--border); color: var(--text-secondary); margin-left: 6px; vertical-align: 1px; }
+.tag.a02 { border-color: var(--series-a02); color: var(--text-primary); }
+
+/* Signals */
+.signals { display: grid; gap: 12px; }
+.signal h3 { font-size: 15px; margin: 0; font-weight: 600; }
+.signal p { margin: 2px 0 10px; font-size: 13px; color: var(--text-secondary); }
+.signal ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.signal li { font-size: 14px; }
+.signal li.a02 { font-weight: 600; }
+.signal .none { color: var(--text-muted); font-size: 14px; }
+.count { color: var(--text-secondary); font-weight: 400; }
+
+/* Change log */
+.log { margin: 0; padding: 0; list-style: none; }
+.log > li { padding: 10px 0; border-bottom: 1px solid var(--grid); display: grid; grid-template-columns: 80px 1fr; gap: 12px; }
+.log .when { color: var(--text-secondary); font-size: 14px; }
+.log .what { display: flex; flex-direction: column; gap: 2px; font-size: 14px; }
+.add { color: var(--good-text); }
+.rem { color: var(--text-secondary); }
+.what .a02 { font-weight: 600; }
+
+#tip {
+  position: fixed; pointer-events: none; z-index: 10; display: none;
+  background: var(--surface); color: var(--text-primary);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px;
+  font-size: 13px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); max-width: 240px;
+}
+#tip .t { color: var(--text-secondary); }
+footer { margin-top: 48px; font-size: 13px; color: var(--text-muted); }
+footer p { margin: 0 0 6px; }
+.error { color: var(--critical); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>1-bedroom watch</h1>
+    <p class="sub" id="updated">Modera Northgate · loading…</p>
+  </header>
+
+  <section>
+    <div class="card spotlight" id="a02"></div>
+    <div class="tiles" id="tiles"></div>
+    <div class="controls">
+      <label><input type="checkbox" id="mfte" checked> Include income-restricted (MFTE) units</label>
+    </div>
+  </section>
+
+  <section>
+    <h2>Which 1-bed units were listed, day by day</h2>
+    <p class="hint">Each square is one day. A gap inside a row means the unit vanished and came back, so it was never actually leased.</p>
+    <div class="card">
+      <div class="legend">
+        <span><i class="swatch" style="background:var(--series-a02)"></i>A02 listed</span>
+        <span><i class="swatch" style="background:var(--series-other)"></i>Other 1-bed listed</span>
+        <span><i class="swatch" style="background:var(--empty-cell);outline:1px solid var(--border)"></i>Not listed</span>
+      </div>
+      <div class="grid-wrap" id="gridwrap"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Held-back signals</h2>
+    <p class="hint">On any one day a held-back unit looks like a leased one. These patterns only show up over time.</p>
+    <div class="signals" id="signals"></div>
+  </section>
+
+  <section>
+    <h2>Listed now</h2>
+    <p class="hint" id="nowhint"></p>
+    <div class="card table-wrap" id="now"></div>
+  </section>
+
+  <section>
+    <h2>Daily changes</h2>
+    <p class="hint">1-bed units added to or removed from the public list, newest first.</p>
+    <div class="card"><ul class="log" id="log"></ul></div>
+  </section>
+
+  <footer>
+    <p>Data: the public unit map on moderanorthgateseattle.com, captured once a day by a GitHub Action.</p>
+    <p>"Listed" means the landlord is publicly offering it. "Not listed" can mean leased, occupied, or held back. Only the history tells those apart.</p>
+  </footer>
+</main>
+<div id="tip"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmtDate = d => new Date(d + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" });
+const fmtMoney = n => "$" + Math.round(n).toLocaleString("en-US");
+const dayDiff = (a, b) => Math.round((new Date(b + "T00:00:00") - new Date(a + "T00:00:00")) / 864e5);
+const isMfte = plan => /MFTE/i.test(plan);
+const planName = plan => plan.replace(/\s*\(MFTE\).*$/i, "");
+const isA02 = plan => planName(plan) === "A02";
+const planCell = plan =>
+  esc(planName(plan)) + (isA02(plan) ? '<span class="tag a02">watching</span>' : "") + (isMfte(plan) ? '<span class="tag">MFTE</span>' : "");
+
+let DATA, includeMfte = true;
+try { includeMfte = localStorage.getItem("includeMfte") !== "0"; } catch (e) {}
+$("mfte").checked = includeMfte;
+$("mfte").addEventListener("change", e => {
+  includeMfte = e.target.checked;
+  try { localStorage.setItem("includeMfte", includeMfte ? "1" : "0"); } catch (err) {}
+  render();
+});
+
+fetch("history.json", { cache: "no-store" })
+  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+  .then(d => { DATA = d; render(); })
+  .catch(err => { $("updated").innerHTML = '<span class="error">Could not load history.json (' + esc(err.message) + ").</span>"; });
+
+function keep(info) { return info.beds === 1 && (includeMfte || !isMfte(info.plan)); }
+
+function render() {
+  const dates = Object.keys(DATA.snapshots).sort();
+  const today = dates[dates.length - 1];
+  const snap = d => Object.fromEntries(Object.entries(DATA.snapshots[d]).filter(([, i]) => keep(i)));
+  const current = snap(today);
+  const previous = dates.length > 1 ? snap(dates[dates.length - 2]) : null;
+
+  // every 1-bed unit ever listed, with the dates it was listed
+  const units = {};
+  for (const d of dates) for (const [u, info] of Object.entries(snap(d))) {
+    (units[u] ||= { unit: u, plan: info.plan, rows: [] }).rows.push([d, info]);
+  }
+  const firstOfCurrentRun = u => {
+    const listed = new Set(units[u].rows.map(r => r[0]));
+    let i = dates.length - 1;
+    while (i > 0 && listed.has(dates[i - 1])) i--;
+    return dates[i];
+  };
+
+  $("updated").textContent = `Modera Northgate · updated ${fmtDate(today)} · ${dates.length} daily snapshot${dates.length === 1 ? "" : "s"} since ${fmtDate(dates[0])}`;
+
+  // A02 spotlight
+  const a02Now = Object.entries(current).filter(([, i]) => isA02(i.plan)).sort((a, b) => a[1].price - b[1].price);
+  let html = `<div class="spot-head"><span class="hero num">${a02Now.length}</span><span class="spot-label">A02 unit${a02Now.length === 1 ? "" : "s"} listed right now</span></div>`;
+  if (a02Now.length) {
+    html += '<ul class="spot-units">' + a02Now.map(([u, i]) => {
+      const since = firstOfCurrentRun(u);
+      return `<li><b>Unit ${esc(u)}</b><span class="num">${fmtMoney(i.price)}/mo</span><span class="num">${i.sqft} sq ft</span>` +
+        `<span>available ${fmtDate(i.available_on)}</span><span class="spot-label">listed since ${fmtDate(since)}</span></li>`;
+    }).join("") + "</ul>";
+  } else {
+    const past = Object.values(units).filter(x => isA02(x.plan)).map(x => [x.unit, x.rows[x.rows.length - 1][0]]).sort((a, b) => b[1].localeCompare(a[1]));
+    html += `<p class="spot-empty">${past.length ? `Last listed: unit ${esc(past[0][0])} on ${fmtDate(past[0][1])}. If it comes back, it was never leased.` : "No A02 has been listed since tracking began."}</p>`;
+  }
+  $("a02").innerHTML = html;
+
+  // Stat tiles
+  const n = Object.keys(current).length;
+  const ready = Object.values(current).filter(i => i.available_on <= addDays(today, 1)).length;
+  const added = previous ? Object.keys(current).filter(u => !previous[u]).length : 0;
+  const removed = previous ? Object.keys(previous).filter(u => !current[u]).length : 0;
+  const flagCount = ["relisted", "ready_on_release"].reduce((s, k) => s + DATA.flags[k].filter(keep).length, 0);
+  $("tiles").innerHTML = [
+    tile("1-beds listed now", n, previous ? `+${added} / −${removed} since ${fmtDate(dates[dates.length - 2])}` : "first snapshot"),
+    tile("Ready to move in", ready, "available within a day"),
+    tile("Held-back signals", flagCount, "relisted or released ready"),
+  ].join("");
+
+  renderGrid(dates, units);
+  renderSignals();
+
+  // Listed now
+  $("nowhint").textContent = `${n} one-bedroom unit${n === 1 ? "" : "s"} on the public list today. A02 first, then by rent.`;
+  const rows = Object.entries(current).sort((a, b) => (isA02(b[1].plan) - isA02(a[1].plan)) || a[1].price - b[1].price);
+  $("now").innerHTML = rows.length ? `<table class="list"><thead><tr><th>Unit</th><th>Plan</th><th class="r">Sq ft</th><th class="r">Rent</th><th>Available</th><th class="r">Days listed</th></tr></thead><tbody>` +
+    rows.map(([u, i]) => `<tr class="${isA02(i.plan) ? "a02" : ""}"><td><b>${esc(u)}</b></td><td>${planCell(i.plan)}</td><td class="r num">${i.sqft}</td><td class="r num">${fmtMoney(i.price)}</td><td>${fmtDate(i.available_on)}</td><td class="r num">${dayDiff(firstOfCurrentRun(u), today) + 1}</td></tr>`).join("") +
+    "</tbody></table>" : '<p class="spot-empty">No one-bedroom units are listed today.</p>';
+
+  // Change log
+  const log = [];
+  for (let k = dates.length - 1; k > 0 && log.length < 30; k--) {
+    const a = snap(dates[k - 1]), b = snap(dates[k]);
+    const plus = Object.keys(b).filter(u => !a[u]).map(u => `<span class="add ${isA02(b[u].plan) ? "a02" : ""}">+ ${esc(u)} ${esc(planName(b[u].plan))} · ${fmtMoney(b[u].price)} · available ${fmtDate(b[u].available_on)}</span>`);
+    const minus = Object.keys(a).filter(u => !b[u]).map(u => `<span class="rem ${isA02(a[u].plan) ? "a02" : ""}">− ${esc(u)} ${esc(planName(a[u].plan))} · was ${fmtMoney(a[u].price)}</span>`);
+    if (plus.length || minus.length) log.push(`<li><span class="when">${fmtDate(dates[k])}</span><span class="what">${plus.concat(minus).join("")}</span></li>`);
+  }
+  $("log").innerHTML = log.join("") || `<li><span class="when">—</span><span class="what rem">No changes yet. This fills in as daily snapshots arrive.</span></li>`;
+}
+
+function addDays(d, n) {
+  const t = new Date(d + "T00:00:00"); t.setDate(t.getDate() + n);
+  return t.toLocaleDateString("en-CA");
+}
+
+function tile(label, value, delta) {
+  return `<div class="card tile"><div class="label">${label}</div><div class="value num">${value}</div><div class="delta">${delta}</div></div>`;
+}
+
+function renderGrid(dates, units) {
+  const list = Object.values(units).sort((a, b) =>
+    (isA02(b.plan) - isA02(a.plan)) || planName(a.plan).localeCompare(planName(b.plan)) || a.unit.localeCompare(b.unit, undefined, { numeric: true }));
+  if (!list.length) { $("gridwrap").innerHTML = '<p class="spot-empty">No one-bedroom units listed yet.</p>'; return; }
+  const step = dates.length > 45 ? 7 : 1;
+  let months = '<tr><th></th>', days = '<tr><th></th>';
+  dates.forEach((d, i) => {
+    const prev = dates[i - 1];
+    months += `<th class="month">${!prev || prev.slice(0, 7) !== d.slice(0, 7) ? "<span>" + new Date(d + "T00:00:00").toLocaleDateString("en-US", { month: "short" }) + "</span>" : ""}</th>`;
+    days += `<th class="num">${i % step === 0 || i === dates.length - 1 ? +d.slice(8) : ""}</th>`;
+  });
+  const body = list.map(x => {
+    const byDate = Object.fromEntries(x.rows);
+    const a02 = isA02(x.plan);
+    return `<tr><td class="unit"><b>${esc(x.unit)}</b> ${esc(planName(x.plan))}</td>` +
+      dates.map(d => `<td class="c${byDate[d] ? " on" : ""}${a02 ? " a02" : ""}" data-u="${esc(x.unit)}" data-d="${d}"></td>`).join("") + "</tr>";
+  }).join("");
+  $("gridwrap").innerHTML = `<table class="presence"><thead>${months}</tr>${days}</tr></thead><tbody>${body}</tbody></table>`;
+  $("gridwrap").scrollLeft = $("gridwrap").scrollWidth;
+
+  const tip = $("tip");
+  $("gridwrap").onmousemove = e => {
+    const c = e.target.closest("td.c");
+    if (!c) { tip.style.display = "none"; return; }
+    const x = units[c.dataset.u], info = Object.fromEntries(x.rows)[c.dataset.d];
+    tip.innerHTML = `<b>Unit ${esc(x.unit)}</b> · ${esc(planName(x.plan))}<br><span class="t">${fmtDate(c.dataset.d)}</span><br>` +
+      (info ? `Listed · ${fmtMoney(info.price)} · available ${fmtDate(info.available_on)}` : "Not listed");
+    tip.style.display = "block";
+    const w = tip.offsetWidth;
+    tip.style.left = Math.min(e.clientX + 14, window.innerWidth - w - 8) + "px";
+    tip.style.top = (e.clientY + 14) + "px";
+  };
+  $("gridwrap").onmouseleave = () => { tip.style.display = "none"; };
+}
+
+function renderSignals() {
+  const groups = [
+    ["relisted", "Pulled, then re-listed", "Vanished from the list and came back, so it wasn't leased. Either it was held back or a deal fell through. Strongest sign.",
+      f => `${esc(f.unit)} ${esc(planName(f.plan))}: gone after ${fmtDate(f.gone_after)}, back ${fmtDate(f.back)} (${fmtMoney(f.old_price)} → ${fmtMoney(f.price)})`],
+    ["ready_on_release", "Released already move-in ready", "Units normally appear weeks before a tenant leaves. One that first shows up ready was probably sitting empty.",
+      f => `${esc(f.unit)} ${esc(planName(f.plan))}: first listed ${fmtDate(f.first_listed)}, available ${fmtDate(f.available_on)}${f.replaced_same_plan ? ", the same day another unit of this plan left" : ""}`],
+    ["gone", "No longer listed", "Probably leased, unless it reappears above.",
+      f => `${esc(f.unit)} ${esc(planName(f.plan))}: last listed ${fmtDate(f.last_listed)} at ${fmtMoney(f.price)}`],
+  ];
+  $("signals").innerHTML = groups.map(([key, title, desc, line]) => {
+    const items = DATA.flags[key].filter(keep).sort((a, b) => isA02(b.plan) - isA02(a.plan));
+    return `<div class="card signal"><h3>${title} <span class="count num">${items.length}</span></h3><p>${desc}</p>` +
+      (items.length ? "<ul>" + items.map(f => `<li class="${isA02(f.plan) ? "a02" : ""}">${line(f)}</li>`).join("") + "</ul>"
+        : '<span class="none">None yet. Needs a few days of history.</span>') + "</div>";
+  }).join("");
+}
+</script>
+</body>
+</html>
