@@ -82,8 +82,6 @@ section { margin-top: 36px; }
 .tile .delta { font-size: 13px; color: var(--text-secondary); }
 
 /* Controls */
-.controls { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin-top: 20px; color: var(--text-secondary); font-size: 14px; }
-.controls label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
 
 /* Presence grid */
 .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; }
@@ -99,6 +97,7 @@ table.presence { border-collapse: separate; border-spacing: 2px; font-size: 12px
   padding-right: 10px; white-space: nowrap; color: var(--text-secondary); text-align: left;
 }
 .presence td.unit b { color: var(--text-primary); font-weight: 600; }
+.presence td.unit .rent { color: var(--text-primary); margin-left: 4px; }
 .presence td.c { width: 16px; height: 16px; padding: 0; border-radius: 4px; background: var(--empty-cell); }
 .presence td.c.on { background: var(--series-other); }
 .presence td.c.on.a02 { background: var(--series-a02); }
@@ -155,9 +154,6 @@ footer p { margin: 0 0 6px; }
   <section>
     <div class="card spotlight" id="a02"></div>
     <div class="tiles" id="tiles"></div>
-    <div class="controls">
-      <label><input type="checkbox" id="mfte" checked> Include income-restricted (MFTE) units</label>
-    </div>
   </section>
 
   <section>
@@ -202,29 +198,22 @@ footer p { margin: 0 0 6px; }
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmtDate = d => new Date(d + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" });
-const fmtMoney = n => "$" + Math.round(n).toLocaleString("en-US");
+const fmtMoney = n => "$" + Math.round(n).toLocaleString("en-US") + "/mo";
 const dayDiff = (a, b) => Math.round((new Date(b + "T00:00:00") - new Date(a + "T00:00:00")) / 864e5);
 const isMfte = plan => /MFTE/i.test(plan);
 const planName = plan => plan.replace(/\s*\(MFTE\).*$/i, "");
 const isA02 = plan => planName(plan) === "A02";
-const planCell = plan =>
-  esc(planName(plan)) + (isA02(plan) ? '<span class="tag a02">watching</span>' : "") + (isMfte(plan) ? '<span class="tag">MFTE</span>' : "");
+const planCell = plan => esc(planName(plan)) + (isA02(plan) ? '<span class="tag a02">watching</span>' : "");
 
-let DATA, includeMfte = true;
-try { includeMfte = localStorage.getItem("includeMfte") !== "0"; } catch (e) {}
-$("mfte").checked = includeMfte;
-$("mfte").addEventListener("change", e => {
-  includeMfte = e.target.checked;
-  try { localStorage.setItem("includeMfte", includeMfte ? "1" : "0"); } catch (err) {}
-  render();
-});
+let DATA;
 
 fetch("history.json", { cache: "no-store" })
   .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
   .then(d => { DATA = d; render(); })
   .catch(err => { $("updated").innerHTML = '<span class="error">Could not load history.json (' + esc(err.message) + ").</span>"; });
 
-function keep(info) { return info.beds === 1 && (includeMfte || !isMfte(info.plan)); }
+// 1-bedrooms only, skipping income-restricted (MFTE) units
+function keep(info) { return info.beds === 1 && !isMfte(info.plan); }
 
 function render() {
   const dates = Object.keys(DATA.snapshots).sort();
@@ -245,7 +234,7 @@ function render() {
     return dates[i];
   };
 
-  $("updated").textContent = `Modera Northgate · updated ${fmtDate(today)} · ${dates.length} daily snapshot${dates.length === 1 ? "" : "s"} since ${fmtDate(dates[0])}`;
+  $("updated").textContent = `Modera Northgate · market-rate 1-beds, no MFTE · updated ${fmtDate(today)} · ${dates.length} daily snapshot${dates.length === 1 ? "" : "s"} since ${fmtDate(dates[0])}`;
 
   // A02 spotlight
   const a02Now = Object.entries(current).filter(([, i]) => isA02(i.plan)).sort((a, b) => a[1].price - b[1].price);
@@ -253,7 +242,7 @@ function render() {
   if (a02Now.length) {
     html += '<ul class="spot-units">' + a02Now.map(([u, i]) => {
       const since = firstOfCurrentRun(u);
-      return `<li><b>Unit ${esc(u)}</b><span class="num">${fmtMoney(i.price)}/mo</span><span class="num">${i.sqft} sq ft</span>` +
+      return `<li><b>Unit ${esc(u)}</b><span class="num">${fmtMoney(i.price)}</span><span class="num">${i.sqft} sq ft</span>` +
         `<span>available ${fmtDate(i.available_on)}</span><span class="spot-label">listed since ${fmtDate(since)}</span></li>`;
     }).join("") + "</ul>";
   } else {
@@ -280,7 +269,7 @@ function render() {
   // Listed now
   $("nowhint").textContent = `${n} one-bedroom unit${n === 1 ? "" : "s"} on the public list today. A02 first, then by rent.`;
   const rows = Object.entries(current).sort((a, b) => (isA02(b[1].plan) - isA02(a[1].plan)) || a[1].price - b[1].price);
-  $("now").innerHTML = rows.length ? `<table class="list"><thead><tr><th>Unit</th><th>Plan</th><th class="r">Sq ft</th><th class="r">Rent</th><th>Available</th><th class="r">Days listed</th></tr></thead><tbody>` +
+  $("now").innerHTML = rows.length ? `<table class="list"><thead><tr><th>Unit</th><th>Plan</th><th class="r">Sq ft</th><th class="r">Rent per month</th><th>Available</th><th class="r">Days listed</th></tr></thead><tbody>` +
     rows.map(([u, i]) => `<tr class="${isA02(i.plan) ? "a02" : ""}"><td><b>${esc(u)}</b></td><td>${planCell(i.plan)}</td><td class="r num">${i.sqft}</td><td class="r num">${fmtMoney(i.price)}</td><td>${fmtDate(i.available_on)}</td><td class="r num">${dayDiff(firstOfCurrentRun(u), today) + 1}</td></tr>`).join("") +
     "</tbody></table>" : '<p class="spot-empty">No one-bedroom units are listed today.</p>';
 
@@ -318,7 +307,7 @@ function renderGrid(dates, units) {
   const body = list.map(x => {
     const byDate = Object.fromEntries(x.rows);
     const a02 = isA02(x.plan);
-    return `<tr><td class="unit"><b>${esc(x.unit)}</b> ${esc(planName(x.plan))}</td>` +
+    return `<tr><td class="unit"><b>${esc(x.unit)}</b> ${esc(planName(x.plan))} <span class="rent num">${fmtMoney(x.rows[x.rows.length - 1][1].price)}</span></td>` +
       dates.map(d => `<td class="c${byDate[d] ? " on" : ""}${a02 ? " a02" : ""}" data-u="${esc(x.unit)}" data-d="${d}"></td>`).join("") + "</tr>";
   }).join("");
   $("gridwrap").innerHTML = `<table class="presence"><thead>${months}</tr>${days}</tr></thead><tbody>${body}</tbody></table>`;
@@ -344,7 +333,7 @@ function renderSignals() {
     ["relisted", "Pulled, then re-listed", "Vanished from the list and came back, so it wasn't leased. Either it was held back or a deal fell through. Strongest sign.",
       f => `${esc(f.unit)} ${esc(planName(f.plan))}: gone after ${fmtDate(f.gone_after)}, back ${fmtDate(f.back)} (${fmtMoney(f.old_price)} → ${fmtMoney(f.price)})`],
     ["ready_on_release", "Released already move-in ready", "Units normally appear weeks before a tenant leaves. One that first shows up ready was probably sitting empty.",
-      f => `${esc(f.unit)} ${esc(planName(f.plan))}: first listed ${fmtDate(f.first_listed)}, available ${fmtDate(f.available_on)}${f.replaced_same_plan ? ", the same day another unit of this plan left" : ""}`],
+      f => `${esc(f.unit)} ${esc(planName(f.plan))}: ${fmtMoney(f.price)}, first listed ${fmtDate(f.first_listed)}, available ${fmtDate(f.available_on)}${f.replaced_same_plan ? ", the same day another unit of this plan left" : ""}`],
     ["gone", "No longer listed", "Probably leased, unless it reappears above.",
       f => `${esc(f.unit)} ${esc(planName(f.plan))}: last listed ${fmtDate(f.last_listed)} at ${fmtMoney(f.price)}`],
   ];
